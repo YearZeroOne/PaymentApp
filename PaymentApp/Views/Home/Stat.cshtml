@@ -1,0 +1,146 @@
+﻿@model PaymentApp.Models.StatVm
+
+@{
+    ViewData["Title"] = "Stat";
+}
+
+<h1>Stat</h1>
+
+<form action="/Home/Stat" method="get" id="searchForm">
+    <input placeholder="From" type="number" name="yearFrom" value="@Model.StatFilter.YearFrom" />
+    <input placeholder="To" type="number" name="yearTo" value="@Model.StatFilter.YearTo" /> <br />
+    	<select name="memberId">
+		<option value="">All</option>
+		@foreach (var item in Model.Members)
+		{
+			<option value="@item.MemberId">@item.FirstName @item.LastName @item.MemberId</option>
+		}
+
+	</select>
+    <button class="btn btn-primary">Filter</button>
+    <a href="/Home/Stat" class="btn btn-danger">Reset</a>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+                Deposit Sum
+            </th>
+            <th>
+                Payment Sum
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Average Deposite
+            </th>
+            <th>
+                Average Payment
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Model.Deposits
+            </td>
+            <td>
+                @Model.Payments
+            </td>
+            <td>
+                @Model.CurrentAmount
+            </td>
+            <td>
+                @Model.AverageDeposits
+            </td>
+            <td>
+                @Model.AveragePayments
+            </td>
+       </tr>
+
+    </tbody>
+</table>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="col">
+            <canvas id="myChart2"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('myChart');
+    //Grundsetup von chart.js: einen Verweis zum Canvas-Element holen
+    //Und diesen Verweis an ein Chart-Objekt geben
+    //Zusätzlich muss das Chart-Objekt dann konfiguriert werden
+
+    let chartConfig =
+    {
+        type: 'bar', //Art des Charts (Balkendiagramm, Tortendiagramm, etc.)
+        //Die Daten des Charts müssen in der data-Property definiert werden
+        data: {
+            //Fürs Balkendiagramm besteht die data-Property aus...
+            //Labels: Beschriftung der X-Achse (ein String-Array)
+            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopDepositMembers)),
+            datasets: [
+                {
+                    label: 'Top Deposits',
+                    //Data: enthält die Daten die auf der Y-Achse aufgetragen werden (ein Number-Array)
+                    data: @System.Text.Json.JsonSerializer.Serialize(Model.TopDeposits),
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+
+    new Chart(ctx, chartConfig);
+</script>
+<script>
+    const ctx1 = document.getElementById('myChart2');
+    //Grundsetup von chart.js: einen Verweis zum Canvas-Element holen
+    //Und diesen Verweis an ein Chart-Objekt geben
+    //Zusätzlich muss das Chart-Objekt dann konfiguriert werden
+
+    let chartConfig1 =
+    {
+        type: 'bar', //Art des Charts (Balkendiagramm, Tortendiagramm, etc.)
+        //Die Daten des Charts müssen in der data-Property definiert werden
+        data: {
+            //Fürs Balkendiagramm besteht die data-Property aus...
+            //Labels: Beschriftung der X-Achse (ein String-Array)
+            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopPaymentMembers)),
+            datasets: [
+                {
+                    label: 'Top Payments',
+                    //Data: enthält die Daten die auf der Y-Achse aufgetragen werden (ein Number-Array)
+                    data: @System.Text.Json.JsonSerializer.Serialize(Model.TopPayments),
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+
+    new Chart(ctx1, chartConfig1);
+</script>
+

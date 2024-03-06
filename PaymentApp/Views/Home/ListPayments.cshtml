@@ -1,0 +1,86 @@
+﻿@model IEnumerable<PaymentApp.Models.ListPaymentsVm>
+
+@{
+	ViewData["Title"] = "ListPayments";
+}
+
+<h1>ListPayments</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Id)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Amount)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Description)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.PaymentTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FirstName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.LastName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.InOut)
+			</th>
+			<th>
+				Action
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Id)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Amount)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Description)
+				</td>
+				<td>
+					@{
+						string formattedDate = item.PaymentTime.ToString("dd.MM.yyyy");
+					}
+					@formattedDate
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FirstName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.LastName)
+				</td>
+				<td>
+					@if (item.InOut)
+					{
+						<h5>Deposit</h5>
+					}
+					else
+					{
+						<h5>Payment</h5>
+					}
+				</td>
+				<td>
+					@Html.ActionLink("Edit", "EditPayment", new {  id = item.Id })
+					@*                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+				*@                @Html.ActionLink("Delete", "DeletePayment", new {  id = item.Id })
+
+
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

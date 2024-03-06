@@ -1,0 +1,67 @@
+﻿@model PaymentApp.Models.EditPaymentVm
+
+@{
+    ViewData["Title"] = "EditPayment";
+}
+
+<h1>EditPayment</h1>
+
+<h4>EditPaymentVm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditPayment" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" name="id" hidden class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input name="amount" type="text" value="@Model.Amount.ToString()" pattern="-?[0-9]+(,[0-9]{1,2})?" required step="any" class="form-control"  />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" name="description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentTime" class="control-label"></label>
+                <input asp-for="PaymentTime" name="paymentTime" class="form-control"  />
+                @*max="@DateTime.Today.ToString("yyyy-MM-dd")"*@
+                <span asp-validation-for="PaymentTime" class="text-danger"></span>
+            </div>
+           @* <div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <input asp-for="MemberId" class="form-control" />
+                <span asp-validation-for="MemberId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group form-check">
+				<label class="form-check-label">
+					<input class="form-check-input" asp-for="InOut" /> @Html.DisplayNameFor(model => model.InOut)
+				</label>
+			</div>
+            <div class="form-group">
+                <select name="memberId" required>
+                    <option value="@Model.MemberId">@Model.FirstName, @Model.LastName, @Model.MemberId</option>
+
+                    @foreach (var members in Model.Members)
+                    {
+                            <option value="@members.Id">@members.FirstName, @members.LastName, @members.Id</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
