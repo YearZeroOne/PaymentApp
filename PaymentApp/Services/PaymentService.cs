@@ -165,33 +165,33 @@ namespace PaymentApp.Services
             }
 
         }
-        internal async Task<List<Payment>> Top5Payments(StatFilter statFilter)
+        internal async Task<List<Payment>> Top5Payments(StatFilterObj statFilter)
         {
 
             IQueryable<Payment> baseQuery = _ctx.Payments.Include(g => g.Member).Where(p => p.InOut == false);
             if (statFilter.MemberId is null)
             {
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
             else
             {
                 baseQuery = baseQuery.Where(g => g.MemberId == statFilter.MemberId);
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
 
@@ -199,32 +199,32 @@ namespace PaymentApp.Services
                 .Take(5).ToListAsync();
         }
 
-        internal async Task<List<Payment>> Top5Deposits(StatFilter statFilter)
+        internal async Task<List<Payment>> Top5Deposits(StatFilterObj statFilter)
         {
             IQueryable<Payment> baseQuery = _ctx.Payments.Include(g => g.Member).Where(p => p.InOut); 
             if (statFilter.MemberId is null)
             {
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
             else
             {
                 baseQuery = baseQuery.Where(g => g.MemberId == statFilter.MemberId);
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom );
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
 
@@ -234,106 +234,167 @@ namespace PaymentApp.Services
         }
 
 
-        internal async Task<List<Payment>> GetStats(StatFilter statFilter)
+        internal async Task<List<Payment>> GetStats(StatFilterObj statFilter)
         {
             IQueryable<Payment> baseQuery = _ctx.Payments.Include(g => g.Member);
             if (statFilter.MemberId is null)
             {
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
             else
             {
                 baseQuery = baseQuery.Where(g => g.MemberId == statFilter.MemberId);
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
+
+
+
             return await baseQuery.ToListAsync();
 
 
         }
 
-        internal async Task<decimal>AverageDeposits(StatFilter statFilter)
+        internal async Task<decimal>AverageDeposits(StatFilterObj statFilter)
         {
-            IQueryable<Payment> baseQuery = _ctx.Payments.Include(g => g.Member).Where(x => x.InOut == true);
+
+            IQueryable<Payment> baseQuery = _ctx.Payments.Include(g => g.Member).Where(x => x.InOut);
+            int monthsDifference = 1;
+
+
+
+          
+
             if (statFilter.MemberId is null)
             {
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
             else
             {
                 baseQuery = baseQuery.Where(g => g.MemberId == statFilter.MemberId);
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
-            var payments = await baseQuery.Select(p => p.Amount).ToListAsync();
-            decimal averageAmount = payments.Any() ? payments.Average() : 0;
+
+
+
+            if (statFilter.ToDate is null && statFilter.FromDate is null)
+            {
+                var fromDate = baseQuery.OrderBy(p => p.PaymentDate).FirstOrDefault();
+                var toDate = baseQuery.OrderByDescending(p => p.PaymentDate).FirstOrDefault();
+                monthsDifference += ((toDate.PaymentDate.Year - fromDate.PaymentDate.Year) * 12) + toDate.PaymentDate.Month - fromDate.PaymentDate.Month;
+            }
+
+            else if (statFilter.FromDate is not null && statFilter.ToDate is null)
+            {
+                var toDate = baseQuery.OrderByDescending(p => p.PaymentDate).FirstOrDefault();
+                monthsDifference += ((toDate.PaymentDate.Year - statFilter.FromDate.Value.Year) * 12) + toDate.PaymentDate.Month - statFilter.FromDate.Value.Month;
+            }
+
+            else if (statFilter.ToDate is not null && statFilter.FromDate is null)
+            {
+                var fromDate = baseQuery.OrderBy(p => p.PaymentDate).FirstOrDefault();
+                monthsDifference += ((statFilter.ToDate.Value.Year - fromDate.PaymentDate.Year) * 12) + statFilter.ToDate.Value.Month - fromDate.PaymentDate.Month;
+            }
+
+            else if (statFilter.ToDate is not null && statFilter.FromDate is not null)
+            {
+                monthsDifference += ((statFilter.ToDate.Value.Year - statFilter.FromDate.Value.Year) * 12) + statFilter.ToDate.Value.Month - statFilter.FromDate.Value.Month;
+            }
+            var payments = await baseQuery.Select(p => p.Amount).SumAsync();
+            decimal averageAmount = payments / monthsDifference;
 
             return averageAmount;
         }
 
-        internal async Task<decimal> AveragePayments(StatFilter statFilter)
+        internal async Task<decimal> AveragePayments(StatFilterObj statFilter)
         {
             IQueryable<Payment> baseQuery = _ctx.Payments.Include(g => g.Member).Where(x => x.InOut == false);
+            int monthsDifference = 1;
 
             if (statFilter.MemberId is null)
             {
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
             else
             {
                 baseQuery = baseQuery.Where(g => g.MemberId == statFilter.MemberId);
-
-                if (statFilter.YearFrom != null)
+                if (statFilter.FromDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year >= statFilter.YearFrom);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate >= statFilter.FromDate);
                 }
 
-                if (statFilter.YearTo != null)
+                if (statFilter.ToDate != null)
                 {
-                    baseQuery = baseQuery.Where(g => g.PaymentDate.Year <= statFilter.YearTo);
+                    baseQuery = baseQuery.Where(g => g.PaymentDate <= statFilter.ToDate);
                 }
             }
 
-            var payments = await baseQuery.Select(p => p.Amount).ToListAsync();
-            decimal averageAmount = payments.Any() ? payments.Average() : 0;
+            if (statFilter.ToDate is null && statFilter.FromDate is null)
+            {
+                var fromDate = baseQuery.OrderBy(p => p.PaymentDate).FirstOrDefault();
+                var toDate = baseQuery.OrderByDescending(p => p.PaymentDate).FirstOrDefault();
+                monthsDifference += ((toDate.PaymentDate.Year - fromDate.PaymentDate.Year) * 12) + toDate.PaymentDate.Month - fromDate.PaymentDate.Month;
+            }
+
+            else if (statFilter.FromDate is not null && statFilter.ToDate is null)
+            {
+                var toDate = baseQuery.OrderByDescending(p => p.PaymentDate).FirstOrDefault();
+                monthsDifference += ((toDate.PaymentDate.Year - statFilter.FromDate.Value.Year) * 12) + toDate.PaymentDate.Month - statFilter.FromDate.Value.Month;
+            }
+
+            else if (statFilter.ToDate is not null && statFilter.FromDate is null)
+            {
+                var fromDate = baseQuery.OrderBy(p => p.PaymentDate).FirstOrDefault();
+                monthsDifference += ((statFilter.ToDate.Value.Year - fromDate.PaymentDate.Year) * 12) + statFilter.ToDate.Value.Month - fromDate.PaymentDate.Month;
+            }
+
+            else if (statFilter.ToDate is not null && statFilter.FromDate is not null)
+            {
+                monthsDifference += ((statFilter.ToDate.Value.Year - statFilter.FromDate.Value.Year) * 12) + statFilter.ToDate.Value.Month - statFilter.FromDate.Value.Month;
+            }
+
+
+            var payments = await baseQuery.Select(p => p.Amount).SumAsync();
+            decimal averageAmount = payments / monthsDifference;
 
             return averageAmount;
         }

@@ -32,10 +32,10 @@
     <tbody>
         <tr>
             <td>
-                -@Model.OverallDeposits
+                @Model.OverallDeposits
             </td>
             <td>
-                @Model.OverallPayments
+                -@Model.OverallPayments
             </td>
             <td>
                 @Model.OverallCurrentAmount
@@ -44,7 +44,7 @@
                 -@Model.OverallAverageDeposits
             </td>
             <td>
-                @Model.OverallAveragePayments
+                -@Model.OverallAveragePayments
             </td>
         </tr>
 
@@ -66,8 +66,13 @@
 <h1>Search User Stats</h1>
 
 <form action="/Home/Stat" method="get" id="searchForm">
-    <input placeholder="From" type="number" name="yearFrom" value="@Model.StatFilter.YearFrom" />
-    <input placeholder="To" type="number" name="yearTo" value="@Model.StatFilter.YearTo" /> <br />
+    @*<input placeholder="From" type="number" name="yearFrom" value="@Model.StatFilter.YearFrom" />
+        <input placeholder="To" type="number" name="yearTo" value="@Model.StatFilter.YearTo" /> <br />*@
+
+    <input type="datetime-local" value="@Model.StatFilterObj.FromDate?.ToString("yyyy-MM-dd")" id="fromDate" name="FromDate">
+    <input type="datetime-local" value="@Model.StatFilterObj.ToDate?.ToString("yyyy-MM-dd")" id="toDate" name="ToDate">
+
+
     <select name="memberId">
         <option value="">All</option>
         @foreach (var item in Model.Members)
@@ -79,7 +84,7 @@
     <button class="btn btn-primary">Filter</button>
     <a href="/Home/Stat" class="btn btn-danger">Reset</a>
 </form>
-@if (Model.StatFilter.MemberId is not null || Model.StatFilter.YearFrom is not null || Model.StatFilter.YearTo is not null)
+@if (Model.StatFilterObj.MemberId is not null || Model.StatFilterObj.FromDate is not null || Model.StatFilterObj.ToDate is not null)
 {
     <table class="table">
         <thead>
@@ -106,19 +111,19 @@
         <tbody>
             <tr>
                 <td>
-                    -@Model.Deposits
+                    @Model.Deposits
                 </td>
                 <td>
-                    @Model.Payments
+                    -@Model.Payments
                 </td>
                 <td>
                     @Model.CurrentAmount
                 </td>
                 <td>
-                    -@Model.AverageDeposits
+                    @Model.AverageDeposits
                 </td>
                 <td>
-                    @Model.AveragePayments
+                    -@Model.AveragePayments
                 </td>
             </tr>
 

@@ -6,7 +6,7 @@ namespace PaymentApp.Models
 	{
 
 		public StatFilter StatFilter { get; set; }
-
+		public StatFilterObj StatFilterObj { get; set; }
 
 		public int? Id { get; set; }
 		public decimal CurrentAmount { get; set; }

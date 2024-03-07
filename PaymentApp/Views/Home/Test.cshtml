@@ -1,0 +1,13 @@
+﻿@model PaymentApp.Models.Class1
+@{
+    ViewData["Title"] = "Test";
+}
+
+<h1>Test</h1>
+
+<form action="/Home/Test" method="get">
+    <input type="datetime-local" value="@Model.Date.FromDate?.ToString("yyyy-MM-dd")" id="fromDate" name="FromDate">
+    <input type="datetime-local" value="@Model.Date.ToDate?.ToString("yyyy-MM-dd")" id="toDate" name="ToDate">
+    <button class="btn btn-primary">Filter</button>
+
+</form>
