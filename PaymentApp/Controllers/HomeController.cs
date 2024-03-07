@@ -220,6 +220,32 @@ namespace PaymentApp.Controllers
             var averageDeposits = await _paymentService.AverageDeposits(statFilter);
             var averagePayments = await _paymentService.AveragePayments(statFilter);
 
+            StatFilter overall = new StatFilter();
+
+            var dbStatsOverall = await _paymentService.GetStats(overall);
+            var topDepositsOverall = await _paymentService.Top5Deposits(overall);
+            var topPaymentsOverall = await _paymentService.Top5Payments(overall);
+            var averageDepositsOverall = await _paymentService.AverageDeposits(overall);
+            var averagePaymentsOverall = await _paymentService.AveragePayments(overall);
+
+
+
+
+            foreach (var item in topDepositsOverall)
+            {
+                vm.OverallTopDepositMembers.Add(item.Member.LastName + " " + item.Member.FirstName);
+                vm.OverallTopDeposits.Add(item.Amount);
+
+            }
+
+            foreach (var item in topPaymentsOverall)
+            {
+                vm.OverallTopPaymentMembers.Add(item.Member.LastName + " " + item.Member.FirstName);
+                vm.OverallTopPayments.Add(item.Amount);
+            }
+
+
+
             foreach (var item in topDeposits)
             {
                 vm.TopDepositMembers.Add(item.Member.LastName + " " + item.Member.FirstName);
@@ -234,7 +260,21 @@ namespace PaymentApp.Controllers
             }
 
 
-      
+            foreach (var item in dbStatsOverall)
+            {
+                if (item.InOut)
+                {
+                    vm.OverallDeposits += item.Amount;
+
+                }
+                else
+                {
+                    vm.OverallPayments += item.Amount;
+                }
+
+
+            }
+
             foreach (var item in dbStats)
             {
                 if (item.InOut)
@@ -253,6 +293,11 @@ namespace PaymentApp.Controllers
             vm.CurrentAmount = Math.Round(vm.Deposits - vm.Payments, 2, MidpointRounding.AwayFromZero);
             vm.AveragePayments = Math.Round(averagePayments, 2, MidpointRounding.AwayFromZero);
             vm.AverageDeposits = Math.Round(averageDeposits, 2, MidpointRounding.AwayFromZero);
+
+
+            vm.OverallCurrentAmount = Math.Round(vm.OverallDeposits - vm.OverallPayments, 2, MidpointRounding.AwayFromZero);
+            vm.OverallAveragePayments = Math.Round(averagePaymentsOverall, 2, MidpointRounding.AwayFromZero);
+            vm.OverallAverageDeposits = Math.Round(averageDepositsOverall, 2, MidpointRounding.AwayFromZero);
 
             foreach (var item in dbMember)
 			{
